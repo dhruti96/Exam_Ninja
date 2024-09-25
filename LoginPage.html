@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 30%;
+            margin: 100px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .error {
+            color: red;
+            font-size: 0.9em;
+            display: none;
+        }
+        .submit-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            cursor: pointer;
+        }
+        .submit-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Login</h2>
+    <form id="loginForm">
+        <div class="form-group">
+            <label for="username">Email</label>
+            <input type="text" id="username" name="username" required>
+            <span id="usernameError" class="error">Please enter a valid email address.</span>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+            <span id="passwordError" class="error">Password must contain at least 8 characters.</span>
+            <span id="specialCharError" class="error">Password must contain at least one special character.</span>
+            <span id="numberError" class="error">Password must contain at least one number.</span>
+            <span id="uppercaseError" class="error">Password must contain at least one uppercase letter.</span>
+        </div>
+
+        <button type="submit" class="submit-btn">Login</button>
+    </form>
+</div>
+
+<script>
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        let isValid = true;
+        
+        // Validate Email (Username)
+        const username = document.getElementById('username').value;
+        const usernameError = document.getElementById('usernameError');
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Simple email format validation
+        if (!emailRegex.test(username)) {
+            usernameError.style.display = 'block';
+            isValid = false;
+        } else {
+            usernameError.style.display = 'none';
+        }
+        
+        // Validate Password
+        const password = document.getElementById('password').value;
+        const passwordError = document.getElementById('passwordError');
+        const specialCharError = document.getElementById('specialCharError');
+        const numberError = document.getElementById('numberError');
+        const uppercaseError = document.getElementById('uppercaseError');
+
+        // Clear previous errors
+        passwordError.style.display = 'none';
+        specialCharError.style.display = 'none';
+        numberError.style.display = 'none';
+        uppercaseError.style.display = 'none';
+
+        // Password length validation
+        if (password.length < 8) {
+            passwordError.style.display = 'block';
+            isValid = false;
+        }
+
+        // Special character validation
+        const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
+        if (!specialCharRegex.test(password)) {
+            specialCharError.style.display = 'block';
+            isValid = false;
+        }
+
+        // Number validation
+        const numberRegex = /[0-9]/;
+        if (!numberRegex.test(password)) {
+            numberError.style.display = 'block';
+            isValid = false;
+        }
+
+        // Uppercase letter validation
+        const uppercaseRegex = /[A-Z]/;
+        if (!uppercaseRegex.test(password)) {
+            uppercaseError.style.display = 'block';
+            isValid = false;
+        }
+
+        if (isValid) {
+            alert('Login successful');
+        }
+    });
+</script>
+
+</body>
+</html>
