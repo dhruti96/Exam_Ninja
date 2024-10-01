@@ -130,7 +130,7 @@ public class TestRegistrationPage extends BaseSetUp {
         WebElement cPwd= driver.findElement(By.xpath(p.get("confirmPass").toString()));
         cPwd.sendKeys(p.get("cPass_val").toString());
 
-        WebElement passwordError = driver.findElement(By.xpath("//p[@id=':r7:-helper-text']"));
+        WebElement passwordError = driver.findElement(By.xpath("//p[@id='pwd-helper-text']"));
         assertEquals("Password is required", passwordError.getText());
     }
 
@@ -149,7 +149,7 @@ public class TestRegistrationPage extends BaseSetUp {
         WebElement password = driver.findElement(By.xpath(p.get("password").toString()));
         password.sendKeys(p.get("pass_val").toString());
 
-        WebElement confirmPwdError= driver.findElement(By.xpath("//p[@id=':r9:-helper-text']"));
+        WebElement confirmPwdError= driver.findElement(By.xpath("//p[@id='confirmP-helper-text']"));
         assertEquals( "Confirm Password is required",confirmPwdError.getText());
 
     }
@@ -164,8 +164,8 @@ public class TestRegistrationPage extends BaseSetUp {
         WebElement fNameError = driver.findElement(By.xpath("//p[@id=':r1:-helper-text']"));
         WebElement lNameError = driver.findElement(By.xpath("//p[@id=':r3:-helper-text']"));
         WebElement emailError = driver.findElement(By.xpath("//p[@id=':r5:-helper-text']"));
-        WebElement passwordError = driver.findElement(By.xpath("//p[@id=':r7:-helper-text']"));
-        WebElement cPassword= driver.findElement(By.xpath("//p[@id=':r9:-helper-text']"));
+        WebElement passwordError = driver.findElement(By.xpath("//p[@id='pwd-helper-text']"));
+        WebElement cPassword= driver.findElement(By.xpath("//p[@id='confirmP-helper-text']"));
 
         assertEquals("First Name is required", fNameError.getText());
         assertEquals("Last Name is required", lNameError.getText());
@@ -236,9 +236,9 @@ public class TestRegistrationPage extends BaseSetUp {
         regButton.click();
 
         // Validate error message for weak password
-        WebElement passwordError = driver.findElement(By.xpath("//p[@id=':r7:-helper-text']"));
+        WebElement passwordError = driver.findElement(By.xpath("//p[@id='pwd-helper-text']"));
         // assertTrue( "Weak password error message not displayed",passwordError.isDisplayed());
-        assertEquals("Password must be at least 8 characters", passwordError.getText());
+        assertEquals("Password must be between 8 and 15 characters", passwordError.getText());
     }
 
     @Test
@@ -259,9 +259,9 @@ public class TestRegistrationPage extends BaseSetUp {
         regButton.click();
 
         // Validate error message for weak password
-        WebElement passwordError = driver.findElement(By.xpath("//p[@id=':r7:-helper-text']"));
+        WebElement passwordError = driver.findElement(By.xpath("//p[@id='pwd-helper-text']"));
         // assertTrue( "Weak password error message not displayed",passwordError.isDisplayed());
-        assertEquals("Password must not exceed 15 characters", passwordError.getText());
+        assertEquals("Password must be between 8 and 15 characters", passwordError.getText());
     }
     @Test
     public void testPasswordAndConfirmPasswordMatch(){
@@ -275,13 +275,13 @@ public class TestRegistrationPage extends BaseSetUp {
         email.sendKeys(p.get("email_val").toString());
         WebElement pwdField = driver.findElement(By.xpath(p.get("password").toString()));
         WebElement cPwdField= driver.findElement(By.xpath(p.get("confirmPass").toString()));
-        pwdField.sendKeys("Abc1234");
-        cPwdField.sendKeys("Acb12344");
+        pwdField.sendKeys("Abc*1234");
+        cPwdField.sendKeys("Acb@1234");
         WebElement regButton = driver.findElement(By.xpath(p.get("reg_btn").toString()));
         regButton.click();
 
         // Verify error message or validation for mismatched passwords
-        WebElement errorMessage = driver.findElement(By.xpath("//p[@id=':r9:-helper-text']"));
+        WebElement errorMessage = driver.findElement(By.xpath("//p[@id='confirmP-helper-text']"));
         assertEquals("Passwords must match", errorMessage.getText());
     }
 
@@ -302,7 +302,7 @@ public class TestRegistrationPage extends BaseSetUp {
         WebElement regButton = driver.findElement(By.xpath(p.get("reg_btn").toString()));
         regButton.click();
 
-        WebElement errorMessage = driver.findElement(By.xpath("//p[@id=':r7:-helper-text']"));
+        WebElement errorMessage = driver.findElement(By.xpath("//p[@id='pwd-helper-text']"));
         assertEquals("Password must contain at least one uppercase letter", errorMessage.getText());
     }
 
@@ -323,8 +323,29 @@ public class TestRegistrationPage extends BaseSetUp {
         WebElement regButton = driver.findElement(By.xpath(p.get("reg_btn").toString()));
         regButton.click();
 
-        WebElement errorMessage = driver.findElement(By.xpath("//p[@id=':r7:-helper-text']"));
+        WebElement errorMessage = driver.findElement(By.xpath("//p[@id='pwd-helper-text']"));
         assertEquals("Password must contain at least one special character", errorMessage.getText());
+    }
+
+    @Test
+    public void testPasswordMustHaveNumber(){
+        // Unhappy path: Enter password without Number
+
+        WebElement fName = driver.findElement(By.xpath(p.get("name").toString()));
+        fName.sendKeys(p.get("name_val").toString());
+        WebElement lName = driver.findElement(By.xpath(p.get("lastName").toString()));
+        lName.sendKeys(p.get("lName_val").toString());
+        WebElement email = driver.findElement(By.xpath(p.get("email").toString()));
+        email.sendKeys(p.get("email_val").toString());
+        WebElement pwdField = driver.findElement(By.xpath(p.get("password").toString()));
+        WebElement cPwdField= driver.findElement(By.xpath(p.get("confirmPass").toString()));
+        pwdField.sendKeys("abcd@Def");
+        cPwdField.sendKeys("abcd@Def");
+        WebElement regButton = driver.findElement(By.xpath(p.get("reg_btn").toString()));
+        regButton.click();
+
+        WebElement errorMessage = driver.findElement(By.xpath("//p[@id='pwd-helper-text']"));
+        assertEquals("Password must contain at least one number", errorMessage.getText());
     }
 
     @Test
@@ -342,7 +363,7 @@ public class TestRegistrationPage extends BaseSetUp {
 
     }
 
-   /* @Test
+    @Test
     public void testPasswordDoesNotAcceptSpace(){
         //Unhappy path: Enter space in password field
 
@@ -353,15 +374,15 @@ public class TestRegistrationPage extends BaseSetUp {
         WebElement email = driver.findElement(By.xpath(p.get("email").toString()));
         email.sendKeys(p.get("email_val").toString());
         WebElement pwdField = driver.findElement(By.xpath(p.get("password").toString()));
-        WebElement cPwdField= driver.findElement(By.xpath(p.get("confirmPass").toString()));
+       // WebElement cPwdField= driver.findElement(By.xpath(p.get("confirmPass").toString()));
         pwdField.sendKeys("         ");
-        cPwdField.sendKeys( "         ");
+      //  cPwdField.sendKeys( "         ");
         WebElement regButton = driver.findElement(By.xpath(p.get("reg_btn").toString()));
         regButton.click();
 
-        WebElement errorField = driver.findElement(By.id("//p[@id=':r7:-helper-text']"));
-        assertEquals("Password cannot be empty or space", errorField.getText());
-    }*/
+        WebElement errorField = driver.findElement(By.xpath("//p[@id='pwd-helper-text']"));
+        assertEquals("Password cannot contain only spaces", errorField.getText());
+    }
 }
 
 
