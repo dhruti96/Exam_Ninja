@@ -12,7 +12,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
-public class BulkUploadTest {
+public class BulkUploadTest1 {
 
     private WireMockServer wireMockServer;
 
