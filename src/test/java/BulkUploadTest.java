@@ -12,7 +12,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
-public class BulkUploadTest1 {
+public class BulkUploadTest {
 
     private WireMockServer wireMockServer;
 
@@ -100,6 +100,7 @@ public class BulkUploadTest1 {
                 .extract()
                 .response();
         // System.out.println("Response: " + response.asString());
+
     }
 
     @Test
@@ -110,9 +111,6 @@ public class BulkUploadTest1 {
                 .when()
                 .post("/api/admin/questions/upload")
                 .then()
-//                .statusCode(404)
-//                .body("error", equalTo("File not Attached, Please upload a valid CSV file."))
-//                .body("status", equalTo("File Not Found"))
                 .extract()
                 .response();
 
@@ -129,9 +127,6 @@ public class BulkUploadTest1 {
                 .when()
                 .post("/api/admin/questions/upload")
                 .then()
-//                .statusCode(415)
-//                .body("error", equalTo("Invalid file format. Only CSV files are allowed."))
-//                .body("status", equalTo("Can't upload file"))
                 .extract()
                 .response();
 
@@ -150,9 +145,6 @@ public class BulkUploadTest1 {
                 .when()
                 .post("/api/admin/questions/upload")
                 .then()
-//                .statusCode(400)
-//                .body("error", equalTo("File content is empty. No records found."))
-//                .body("status", equalTo("Can't upload file"));
                 .extract()
                 .response();
     }
@@ -167,9 +159,6 @@ public class BulkUploadTest1 {
                 .when()
                 .post("/api/admin/questions/upload")
                 .then()
-//                .statusCode(400)
-//                .body("error", equalTo("Question text is missing"))
-//                .body("status", equalTo("Upload failed"))
                 .extract()
                 .response();
     }
@@ -184,9 +173,6 @@ public class BulkUploadTest1 {
                 .when()
                 .post("/api/admin/questions/upload")
                 .then()
-//                .statusCode(400)
-//                .body("error", equalTo("Question type must be defined. Allowed values are 'MCQ' or 'True/False'."))
-//                .body("status", equalTo("Upload failed"))
                 .extract()
                 .response();
     }
@@ -225,4 +211,3 @@ public class BulkUploadTest1 {
         wireMockServer.stop();
     }
 }
-
