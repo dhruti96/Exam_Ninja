@@ -1,12 +1,9 @@
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertTrue;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -14,8 +11,10 @@ import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
-public class TestAdminLoginPage extends BaseSetUp1 {
+import static org.testng.AssertJUnit.assertEquals;
+import static org.testng.AssertJUnit.assertTrue;
 
+public class AdminLoginPage extends BaseSetUp1{
     private Logger log = Logger.getLogger(TestAdminLoginPage.class.getName());
     private WebDriver driver;
     private Properties p;
@@ -64,8 +63,8 @@ public class TestAdminLoginPage extends BaseSetUp1 {
         WebElement l_button = driver.findElement(By.xpath(p.get("login_btn").toString()));
         l_button.click();
 
-        WebElement pwdError = driver.findElement(By.xpath("//span[@id='passwordError']"));
-        assertEquals("Please enter valid password", pwdError.getText());
+        WebElement pwdError = driver.findElement(By.xpath("//p[@class='MuiTypography-root MuiTypography-body1 css-lcmie7-MuiTypography-root']"));
+        assertEquals("Incorrect password", pwdError.getText());
     }
 
     @Test
@@ -74,14 +73,14 @@ public class TestAdminLoginPage extends BaseSetUp1 {
         //Enter invalid username and valid password
 
         WebElement userName = driver.findElement(By.xpath(p.get("userName").toString()));
-        userName.sendKeys("xxxxxgmail.com");
+        userName.sendKeys("userName");
         WebElement password = driver.findElement(By.xpath(p.get("pwd").toString()));
         password.sendKeys(p.get("pwd_val").toString());
         WebElement l_button = driver.findElement(By.xpath(p.get("login_btn").toString()));
         l_button.click();
 
-        WebElement userError = driver.findElement(By.xpath("//span[@id='usernameError']"));
-        assertEquals("Please enter a valid email address.", userError.getText());
+        WebElement pwdError = driver.findElement(By.xpath("//p[@class='MuiTypography-root MuiTypography-body1 css-lcmie7-MuiTypography-root']"));
+        assertEquals("User not found", pwdError.getText());
     }
 
     @Test
@@ -90,74 +89,54 @@ public class TestAdminLoginPage extends BaseSetUp1 {
         //Enter invalid username and invalid password
 
         WebElement userName = driver.findElement(By.xpath(p.get("userName").toString()));
-        userName.sendKeys(p.get("uName").toString());
+        userName.sendKeys("userName");
         WebElement password = driver.findElement(By.xpath(p.get("pwd").toString()));
         password.sendKeys("abcdef#12");
         WebElement l_button = driver.findElement(By.xpath(p.get("login_btn").toString()));
         l_button.click();
+
+        WebElement pwdError = driver.findElement(By.xpath("//p[@class='MuiTypography-root MuiTypography-body1 css-lcmie7-MuiTypography-root']"));
+        assertEquals("User not found", pwdError.getText());
     }
 
     @Test
-    public void testPasswordWithoutSpecialCharacter(){
+    public void testEmptyField(){
         // Unhappy path: Unsuccessful login
-        //Enter password without special character
+        //Passing empty username and password
 
-        WebElement userName = driver.findElement(By.xpath(p.get("userName").toString()));
-        userName.sendKeys(p.get("uName").toString());
-        WebElement password = driver.findElement(By.xpath(p.get("pwd").toString()));
-        password.sendKeys("Abcdef12");
         WebElement l_button = driver.findElement(By.xpath(p.get("login_btn").toString()));
         l_button.click();
 
-        WebElement pwdError = driver.findElement(By.xpath("//span[@id='specialCharError']"));
-        assertEquals("Password must contain at least one special character.", pwdError.getText());
+        WebElement pwdError = driver.findElement(By.xpath("//p[@class='MuiTypography-root MuiTypography-body1 css-lcmie7-MuiTypography-root']"));
+        assertEquals("Validation failed", pwdError.getText());
     }
 
     @Test
-    public void testPasswordWithoutUpperCase(){
+    public void testEmptyPasswordField(){
         // Unhappy path: Unsuccessful login
-        //Enter password without Uppercase letter
+        //Enter valid username and empty password
 
         WebElement userName = driver.findElement(By.xpath(p.get("userName").toString()));
         userName.sendKeys(p.get("uName").toString());
-        WebElement password = driver.findElement(By.xpath(p.get("pwd").toString()));
-        password.sendKeys("abc#def1");
         WebElement l_button = driver.findElement(By.xpath(p.get("login_btn").toString()));
         l_button.click();
 
-        WebElement pwdError = driver.findElement(By.xpath("//span[@id='uppercaseError']"));
-        assertEquals("Password must contain at least one uppercase letter.", pwdError.getText());
+        WebElement pwdError = driver.findElement(By.xpath("//p[@class='MuiTypography-root MuiTypography-body1 css-lcmie7-MuiTypography-root']"));
+        assertEquals("Validation failed", pwdError.getText());
     }
 
     @Test
-    public void testPasswordWithoutNumber(){
+    public void testEmptyUsernameField(){
         // Unhappy path: Unsuccessful login
-        //Enter password without number
+        //Enter valid password and empty username
 
-        WebElement userName = driver.findElement(By.xpath(p.get("userName").toString()));
-        userName.sendKeys(p.get("uName").toString());
         WebElement password = driver.findElement(By.xpath(p.get("pwd").toString()));
-        password.sendKeys("abc#defgh");
+        password.sendKeys(p.get("pwd_val").toString());
         WebElement l_button = driver.findElement(By.xpath(p.get("login_btn").toString()));
         l_button.click();
 
-        WebElement pwdError = driver.findElement(By.xpath("//span[@id='numberError']"));
-        assertEquals("Password must contain at least one number.", pwdError.getText());
+        WebElement pwdError = driver.findElement(By.xpath("//p[@class='MuiTypography-root MuiTypography-body1 css-lcmie7-MuiTypography-root']"));
+        assertEquals("Validation failed", pwdError.getText());
     }
 
-    @Test
-    public void testWeakPassword(){
-        // Unhappy path: Unsuccessful login
-        //Enter lest than 8 character in password
-
-        WebElement userName = driver.findElement(By.xpath(p.get("userName").toString()));
-        userName.sendKeys(p.get("uName").toString());
-        WebElement password = driver.findElement(By.xpath(p.get("pwd").toString()));
-        password.sendKeys("abc#1");
-        WebElement l_button = driver.findElement(By.xpath(p.get("login_btn").toString()));
-        l_button.click();
-
-        WebElement pwdError = driver.findElement(By.xpath("//span[@id='passwordError']"));
-        assertEquals("Password must contain at least 8 characters.", pwdError.getText());
-    }
 }
